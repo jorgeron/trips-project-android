@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Entregable01</string>
+    <string name="welcome_message">¡Bienvenido a TripsApp!</string>
+    <string name="precio">Precio:</string>
+    <string name="fecha_de_salida">Fecha de salida:</string>
+    <string name="fecha_de_llegada">Fecha de llegada:</string>
+    <string name="lugar_de_salida">Lugar de salida:</string>
+    <string name="seleccionar">Seleccionar:</string>
+    <string name="filtrar">Filtrar</string>
+    <string name="columnas">Columnas</string>
+    <string name="comprar">Comprar</string>
+</resources>
