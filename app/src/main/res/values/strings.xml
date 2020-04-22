@@ -9,4 +9,9 @@
     <string name="filtrar">Filtrar</string>
     <string name="columnas">Columnas</string>
     <string name="comprar">Comprar</string>
+    <string name="login_email_et_hint">Correo electrónico</string>
+    <string name="login_pass_et_hint">Contraseña</string>
+    <string name="login_button_mail_text">acceder</string>
+    <string name="login_button_google_text">Acceso con google</string>
+    <string name="login_button_register_text">Registrar</string>
 </resources>

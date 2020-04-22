@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "53400112690",
+    "firebase_url": "https://android-trips.firebaseio.com",
+    "project_id": "android-trips",
+    "storage_bucket": "android-trips.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53400112690:android:b40bd29f813c8b4786762b",
+        "android_client_info": {
+          "package_name": "us.master.entregable01"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53400112690-sn0vmgj30epop7mvs2gou93h99i6bq3b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvTCy556plkHgsDs_DdJtIYZDem3FQ95A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53400112690-sn0vmgj30epop7mvs2gou93h99i6bq3b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
