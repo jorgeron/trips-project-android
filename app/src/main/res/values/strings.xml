@@ -14,4 +14,25 @@
     <string name="login_button_mail_text">acceder</string>
     <string name="login_button_google_text">Acceso con google</string>
     <string name="login_button_register_text">Registrar</string>
+    <string name="login_mail_error_1">El correo no puede ser vacío</string>
+    <string name="login_mail_error_2">La contraseña no puede ser vacía</string>
+    <string name="login_mail_access_error">Se ha producido un error al acceder</string>
+    <string name="login_verified_mail_error">Aún no has validado tu cuenta de usuario. ¿Quieres que te reenviemos el correo de verificación?</string>
+    <string name="login_verified_mail_ok">Enviar correo</string>
+    <string name="login_verified_mail_error_sent">Hemos enviado el correo de verificación</string>
+    <string name="login_verified_mail_no_error_sent">No hemos podido enviar el correo de verificación</string>
+    <string name="login_verified_mail_error_cancel">Cancelar</string>
+    <string name="login_google_play_services_error">Debes ctualizar Google Play Services antes de continuar</string>
+    <string name="login_download_gps">Actualizar</string>
+    <string name="gps_download_url">market://details?id=com.google.android.gms</string>
+    <string name="market_dowload_url">https://play.google.com/store/apps/details?id=com.google.android.gms</string>
+    <string name="default_client_id">53400112690-sn0vmgj30epop7mvs2gou93h99i6bq3b.apps.googleusercontent.com</string>
+    <string name="login_completed">El usuario %1$s ha accedido correctamente</string>
+    <string name="login_pass_confirmation_et_hint">Repita la contraseña</string>
+    <string name="login_button_signup_text">Registrar usuario</string>
+    <string name="signup_error_user">La dirección de correo no es válida</string>
+    <string name="signup_error_pass">La contraseña no es válida</string>
+    <string name="signup_error_pass_not_match">Las contraseñas no coinciden</string>
+    <string name="signup_created">El usuario se ha registrado correctamente</string>
+    <string name="signup_created_error">Se ha producido un error al registrar nuevo usuario</string>
 </resources>

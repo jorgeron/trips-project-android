@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "53400112690-5j8genu3ul4gjjle0bv35o7ihfolghk9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "us.master.entregable01",
+            "certificate_hash": "9723030e2d68a4a8be43deb51272f6c0f1d5285d"
+          }
+        },
+        {
           "client_id": "53400112690-sn0vmgj30epop7mvs2gou93h99i6bq3b.apps.googleusercontent.com",
           "client_type": 3
         }
