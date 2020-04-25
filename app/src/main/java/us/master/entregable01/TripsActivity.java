@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 import us.master.entregable01.adapter.TripsAdapter;
 import us.master.entregable01.entity.Trip;
+import us.master.entregable01.entity.Util;
 
 public class TripsActivity extends AppCompatActivity implements TripsAdapter.OnTripListener {
 
@@ -34,6 +36,7 @@ public class TripsActivity extends AppCompatActivity implements TripsAdapter.OnT
     static final int FILTER_REQUEST = 1;
     static final int DETAIL_REQUEST = 2;
     GridLayoutManager gridLayoutManager;
+    FirebaseUser currentUser;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -42,6 +45,7 @@ public class TripsActivity extends AppCompatActivity implements TripsAdapter.OnT
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trips);
 
+        currentUser = (FirebaseUser) getIntent().getExtras().get("currentUser");
         recyclerView = findViewById(R.id.recyclerView);
         filterButton = findViewById(R.id.button_filtrar);
         switchColumnas = findViewById(R.id.switch_columnas);
@@ -120,7 +124,7 @@ public class TripsActivity extends AppCompatActivity implements TripsAdapter.OnT
                 int positionMostrados = data.getIntExtra("position", 0);
 
                 tripsMostrados.set(positionMostrados, trip);
-                totalTrips.set(trip.getId()-1, trip);
+                totalTrips.set(trip.getId(), trip);
                 getIntent().putExtra("trips", totalTrips);
             }
         }
@@ -132,7 +136,7 @@ public class TripsActivity extends AppCompatActivity implements TripsAdapter.OnT
     private ArrayList<Trip> filtrarTrips(ArrayList<Trip> trips, Calendar fechaInicio, Calendar fechaFin, Integer precioMax) {
         ArrayList<Trip> result = new ArrayList<>();
 
-        if (fechaInicio != null && fechaFin == null) { // solo fecha inicio
+        /*if (fechaInicio != null && fechaFin == null) { // solo fecha inicio
             result = (ArrayList<Trip>) trips.stream().filter(trip->(trip.getFechaInicio().after(fechaInicio)
                     || trip.getFechaInicio().equals(fechaInicio))).collect(Collectors.toList());
         } else if (fechaInicio == null && fechaFin != null) { // solo fecha fin
@@ -141,6 +145,19 @@ public class TripsActivity extends AppCompatActivity implements TripsAdapter.OnT
             result = (ArrayList<Trip>) trips.stream().filter(trip->((trip.getFechaInicio().after(fechaInicio)
                     || trip.getFechaInicio().equals(fechaInicio))
                     && trip.getFechaInicio().before(fechaFin))).collect(Collectors.toList());
+        } else { // no se especifica fecha
+            result = trips;
+        }*/
+
+        if (fechaInicio != null && fechaFin == null) { // solo fecha inicio
+            result = (ArrayList<Trip>) trips.stream().filter(trip->(trip.getFechaInicio() > (Util.Calendar2long(fechaInicio))
+                    || trip.getFechaInicio() == (Util.Calendar2long(fechaInicio)))).collect(Collectors.toList());
+        } else if (fechaInicio == null && fechaFin != null) { // solo fecha fin
+            result = (ArrayList<Trip>) trips.stream().filter(trip->trip.getFechaInicio() < (Util.Calendar2long(fechaFin))).collect(Collectors.toList());
+        } else if (fechaInicio != null && fechaFin != null) { // ambas fechas
+            result = (ArrayList<Trip>) trips.stream().filter(trip->((trip.getFechaInicio() > (Util.Calendar2long(fechaInicio))
+                    || trip.getFechaInicio() == (Util.Calendar2long(fechaInicio)))
+                    && trip.getFechaInicio() < (Util.Calendar2long(fechaFin)))).collect(Collectors.toList());
         } else { // no se especifica fecha
             result = trips;
         }
@@ -163,6 +180,7 @@ public class TripsActivity extends AppCompatActivity implements TripsAdapter.OnT
     public void onBackPressed() {
         Intent intent = new Intent(TripsActivity.this, EnlacesActivity.class);
         intent.putExtra("trips", totalTrips);
+        intent.putExtra("currentUser", currentUser);
         startActivity(intent);
         super.onBackPressed();
     }

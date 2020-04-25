@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Entregable01</string>
+    <string name="app_name">TripsApp</string>
     <string name="welcome_message">¡Bienvenido a TripsApp!</string>
     <string name="precio">Precio:</string>
     <string name="fecha_de_salida">Fecha de salida:</string>
@@ -35,4 +35,18 @@
     <string name="signup_error_pass_not_match">Las contraseñas no coinciden</string>
     <string name="signup_created">El usuario se ha registrado correctamente</string>
     <string name="signup_created_error">Se ha producido un error al registrar nuevo usuario</string>
+    <string name="welcome">"Bienvenido "</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string name="home_second">Home Second</string>
 </resources>

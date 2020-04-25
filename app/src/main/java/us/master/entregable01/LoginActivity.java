@@ -1,16 +1,20 @@
 package us.master.entregable01;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.transition.AutoTransition;
 import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.transition.TransitionSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -31,6 +35,14 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import us.master.entregable01.entity.Trip;
+import us.master.entregable01.entity.Util;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -45,7 +57,10 @@ public class LoginActivity extends AppCompatActivity {
     private AutoCompleteTextView loginEmail;
     private AutoCompleteTextView loginPass;
 
+    private ValueEventListener valueEventListener;
+    private FirebaseDatabaseService firebaseDatabaseService;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +76,8 @@ public class LoginActivity extends AppCompatActivity {
         signInButtonGoogle = findViewById(R.id.login_button_google);
         signInButtonMail = findViewById(R.id.login_button_mail);
         signUpButton = findViewById(R.id.login_button_register);
+
+        hideLoginButton(false);
 
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_client_id))
@@ -87,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -118,6 +136,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void attemptLoginEmail() {
         // Comprobamos si se cumplen restricciones
         loginEmailParent.setError(null);
@@ -134,6 +153,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void signInEmail() {
         if(mAuth == null) {
             mAuth = FirebaseAuth.getInstance();
@@ -165,9 +185,121 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void checkUserDatabaseLogin(FirebaseUser user) {
         //TODO
         Toast.makeText(this, String.format(getString(R.string.login_completed), user.getEmail()), Toast. LENGTH_LONG).show();
+
+        Intent intent = new Intent(LoginActivity.this, EnlacesActivity.class);
+        intent.putExtra("currentUser", user);
+        startActivity(intent);
+        finish();
+
+
+        firebaseDatabaseService = FirebaseDatabaseService.getServiceInstance();
+
+        // Trip trip = Trip.generaTrips(1).get(0);
+        Trip trip = new Trip(1, "Titulo", "lugarSalida", "urlimg", 1657364153, 1659743877, 1000, false, false);
+
+        firebaseDatabaseService.saveTrip(trip, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    Log.i("TripsApp", "Viaje insertado");
+                } else {
+                    Log.i("TripsApp", "Error al insertar viaje " + databaseError.getMessage());
+                }
+            }
+        });
+
+
+        //Este método nos devuelve el snapshot de ese elemento en ese instante concreto. El get de toda la vida
+        firebaseDatabaseService.getTrip("-M5kmOYu0fc7zSVU1mrb").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
+                    Trip trip = dataSnapshot.getValue(Trip.class);
+
+                    Toast.makeText(LoginActivity.this, trip.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        //Con este método nos subscribimos para estar al tanto de modificaciones del elemento
+        valueEventListener = firebaseDatabaseService.getTrip("-M5kmOYu0fc7zSVU1mrb").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
+                    Trip trip = dataSnapshot.getValue(Trip.class);
+                    Log.i("TripsApp", "Elemento modificado individualmente: " + trip.toString());
+                    Toast.makeText(LoginActivity.this, trip.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        ChildEventListener childEventListener = firebaseDatabaseService.getTrip().addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
+                    Trip trip = dataSnapshot.getValue(Trip.class);
+
+                    Log.i("TripsApp", "Nuevo viaje añadido: " + trip.toString());
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
+                    Trip trip = dataSnapshot.getValue(Trip.class);
+
+                    Log.i("TripsApp", "Viaje modificado: " + trip.toString());
+                }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
+                    Trip trip = dataSnapshot.getValue(Trip.class);
+
+                    Log.i("TripsApp", "Viaje eliminado: " + trip.toString());
+                }
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
+                    Trip trip = dataSnapshot.getValue(Trip.class);
+
+                    Log.i("TripsApp", "Viaje movido: " + trip.toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (firebaseDatabaseService != null && valueEventListener != null) {
+            //Para el unsubscribe
+            firebaseDatabaseService.getTrip("-M5kmOYu0fc7zSVU1mrb").removeEventListener(valueEventListener);
+        }
     }
 
     private void showErrorMailVerified(FirebaseUser user) {

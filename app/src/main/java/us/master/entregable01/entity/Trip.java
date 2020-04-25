@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Objects;
 import java.util.Random;
 
 import us.master.entregable01.Constantes;
@@ -19,14 +20,15 @@ public class Trip implements Serializable {
     private String titulo;
     private String lugarSalida;
     private String urlImagen;
-    private Calendar fechaInicio, fechaFin;
+    private long fechaInicio, fechaFin;
     private Integer precio;
     private boolean seleccionado;
-
-
     private boolean comprado;
 
-    public Trip(int id, String titulo, String lugarSalida, String urlImagen, Calendar fechaInicio, Calendar fechaFin, Integer precio, boolean seleccionado, boolean comprado) {
+    public Trip() {
+    }
+
+    public Trip(int id, String titulo, String lugarSalida, String urlImagen, long fechaInicio, long fechaFin, Integer precio, boolean seleccionado, boolean comprado) {
         this.id = id;
         this.titulo = titulo;
         this.lugarSalida = lugarSalida;
@@ -70,19 +72,19 @@ public class Trip implements Serializable {
         this.urlImagen = urlImagen;
     }
 
-    public Calendar getFechaInicio() {
+    public long getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(Calendar fechaInicio) {
+    public void setFechaInicio(long fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public Calendar getFechaFin() {
+    public long getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(Calendar fechaFin) {
+    public void setFechaFin(long fechaFin) {
         this.fechaFin = fechaFin;
     }
 
@@ -110,11 +112,60 @@ public class Trip implements Serializable {
         this.comprado = comprado;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Trip trip = (Trip) o;
+
+        if (id != trip.id) return false;
+        if (fechaInicio != trip.fechaInicio) return false;
+        if (fechaFin != trip.fechaFin) return false;
+        if (seleccionado != trip.seleccionado) return false;
+        if (comprado != trip.comprado) return false;
+        if (titulo != null ? !titulo.equals(trip.titulo) : trip.titulo != null) return false;
+        if (lugarSalida != null ? !lugarSalida.equals(trip.lugarSalida) : trip.lugarSalida != null)
+            return false;
+        if (urlImagen != null ? !urlImagen.equals(trip.urlImagen) : trip.urlImagen != null)
+            return false;
+        return precio != null ? precio.equals(trip.precio) : trip.precio == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (titulo != null ? titulo.hashCode() : 0);
+        result = 31 * result + (lugarSalida != null ? lugarSalida.hashCode() : 0);
+        result = 31 * result + (urlImagen != null ? urlImagen.hashCode() : 0);
+        result = 31 * result + (int) (fechaInicio ^ (fechaInicio >>> 32));
+        result = 31 * result + (int) (fechaFin ^ (fechaFin >>> 32));
+        result = 31 * result + (precio != null ? precio.hashCode() : 0);
+        result = 31 * result + (seleccionado ? 1 : 0);
+        result = 31 * result + (comprado ? 1 : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Trip{" +
+                "id=" + id +
+                ", titulo='" + titulo + '\'' +
+                ", lugarSalida='" + lugarSalida + '\'' +
+                ", urlImagen='" + urlImagen + '\'' +
+                ", fechaInicio=" + fechaInicio +
+                ", fechaFin=" + fechaFin +
+                ", precio=" + precio +
+                ", seleccionado=" + seleccionado +
+                ", comprado=" + comprado +
+                '}';
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static ArrayList<Trip> generaTrips(int max) {
         ArrayList<Trip> list = new ArrayList<>(max);
         Random r=new Random();
-        for(int i=1; i<max; i++) {
+        for(int i=0; i<max; i++) {
             String titulo = Constantes.ciudades[r.nextInt(Constantes.ciudades.length-1)];
             String lugarSalida = Constantes.lugarSalida[r.nextInt(Constantes.lugarSalida.length-1)];
             String urlimg = Constantes.urlImagenes[r.nextInt(Constantes.urlImagenes.length-1)];
@@ -124,7 +175,7 @@ public class Trip implements Serializable {
             boolean seleccionado = false;
             boolean comprado = false;
 
-            list.add(new Trip(i, titulo, lugarSalida, urlimg, fechaInicio, fechaFin, precio, seleccionado, comprado));
+            list.add(new Trip(i, titulo, lugarSalida, urlimg, Util.Calendar2long(fechaInicio), Util.Calendar2long(fechaFin), precio, seleccionado, comprado));
         }
         return list;
     }

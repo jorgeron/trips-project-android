@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.google.firebase.auth.FirebaseUser;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import us.master.entregable01.entity.Trip;
 
 public class SelectedTripsActivity extends AppCompatActivity {
 
+    FirebaseUser currentUser;
     ArrayList<Trip> selectedTrips;
     ArrayList<Trip> totalTrips;
 
@@ -23,6 +26,8 @@ public class SelectedTripsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        currentUser = (FirebaseUser) getIntent().getExtras().get("currentUser");
 
         if (getIntent().hasExtra("trips")) {
             totalTrips = (ArrayList<Trip>) getIntent().getExtras().get("trips");
@@ -37,6 +42,7 @@ public class SelectedTripsActivity extends AppCompatActivity {
         Intent intent = new Intent(SelectedTripsActivity.this, TripsActivity.class);
         intent.putExtra("trips", totalTrips);
         intent.putExtra("selectedTrips", selectedTrips);
+        intent.putExtra("currentUser", currentUser);
         startActivity(intent);
         finish();
 

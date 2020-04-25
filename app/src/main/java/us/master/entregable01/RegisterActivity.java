@@ -47,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
             } else if (login_pass_confirmation_et.getText().length() == 0) {
                 login_pass_confirmation.setErrorEnabled(true);
                 login_pass_confirmation.setError(getString(R.string.signup_error_pass));
-            } else if (!login_pass_confirmation_et.getText().toString().equals(login_email_et.getText().toString())) {
+            } else if (!login_pass_confirmation_et.getText().toString().equals(login_pass_et.getText().toString())) {
                 login_pass.setErrorEnabled(true);
                 login_pass.setError(getString(R.string.signup_error_pass_not_match));
             } else {

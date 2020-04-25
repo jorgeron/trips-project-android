@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,9 +17,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
-import java.io.Serializable;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +31,15 @@ import us.master.entregable01.entity.Trip;
 
 public class EnlacesActivity extends AppCompatActivity {
 
+    private long backPressedTime;
+    private Toast backToast;
+
     ArrayList<Enlace> enlaces;
     //RecyclerView recyclerView;
     ListView listView;
     ArrayList<Trip> trips;
+    FirebaseUser currentUser;
+    TextView textView_welcome;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -41,6 +48,12 @@ public class EnlacesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_enlaces);
 
         listView = findViewById(R.id.listView);
+        textView_welcome = findViewById(R.id.textView_welcome);
+
+        currentUser = (FirebaseUser) getIntent().getExtras().get("currentUser");
+        String nombre = currentUser.getDisplayName() != null ? currentUser.getDisplayName() : currentUser.getEmail();
+        textView_welcome.setText(getString(R.string.welcome) + nombre);
+
         enlaces = Enlace.generaEnlaces();
 
         if (getIntent().hasExtra("trips")) {
@@ -58,6 +71,7 @@ public class EnlacesActivity extends AppCompatActivity {
                 Enlace seleccionado = (Enlace) parent.getItemAtPosition(position);
                 Intent intent = new Intent(EnlacesActivity.this, seleccionado.getClase());
                 intent.putExtra("trips", trips);
+                intent.putExtra("currentUser", currentUser);
                 startActivity(intent);
                 finish();
                 // podría hacerlo también con método onResume
@@ -67,7 +81,21 @@ public class EnlacesActivity extends AppCompatActivity {
         listView.setOnItemClickListener(listener);
     }
 
+    @Override
+    public void onBackPressed() {
 
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            backToast.cancel();
+            FirebaseAuth.getInstance().signOut();
+            super.onBackPressed();
+            return;
+        } else {
+            backToast = Toast.makeText(getBaseContext(), "Pulsa de nuevo para salir", Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+
+        backPressedTime = System.currentTimeMillis();
+    }
 }
 
 class EnlacesAdapter extends ArrayAdapter<Enlace> {
