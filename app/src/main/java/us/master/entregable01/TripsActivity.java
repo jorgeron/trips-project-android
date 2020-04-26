@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -40,6 +41,7 @@ public class TripsActivity extends AppCompatActivity implements TripsAdapter.OnT
     static final int FILTER_REQUEST = 1;
     static final int DETAIL_REQUEST = 2;
     GridLayoutManager gridLayoutManager;
+    FloatingActionButton floatingActionButton;
 
     FirebaseUser currentUser;
     private FirebaseDatabaseService firebaseDatabaseService;
@@ -56,6 +58,7 @@ public class TripsActivity extends AppCompatActivity implements TripsAdapter.OnT
         filterButton = findViewById(R.id.button_filtrar);
         switchColumnas = findViewById(R.id.switch_columnas);
         //totalTrips = (ArrayList<Trip>) getIntent().getExtras().get("trips");
+        floatingActionButton = findViewById(R.id.create_trip_floating_button);
         firebaseDatabaseService = FirebaseDatabaseService.getServiceInstance();
 
 
@@ -169,13 +172,21 @@ public class TripsActivity extends AppCompatActivity implements TripsAdapter.OnT
             }*/
             startActivityForResult(intent, FILTER_REQUEST);
         });
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(TripsActivity.this, TripFormActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void refreshRecyclerView(ArrayList<Trip> trips, String msg) {
         TripsAdapter adapter = new TripsAdapter(trips, this);
         recyclerView.setAdapter(adapter);
 
-        Snackbar snackbar = Snackbar.make(recyclerView, msg, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(recyclerView, msg, Snackbar.LENGTH_SHORT);
         snackbar.show();
     }
 

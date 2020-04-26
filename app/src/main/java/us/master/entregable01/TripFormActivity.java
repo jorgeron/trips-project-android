@@ -10,7 +10,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseError;
@@ -98,8 +100,10 @@ public class TripFormActivity extends AppCompatActivity {
                         public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                             if (databaseError == null) {
                                 Log.i("TripsApp", "Viaje insertado");
+                                finish();
                             } else {
                                 Log.i("TripsApp", "Error al insertar viaje " + databaseError.getMessage());
+                                Toast.makeText(TripFormActivity.this, R.string.trip_created_error, Toast.LENGTH_LONG).show();
                             }
                         }
                     });
