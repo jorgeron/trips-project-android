@@ -3,10 +3,12 @@ package us.master.entregable01;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,11 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import us.master.entregable01.adapter.TripsAdapter;
@@ -32,11 +36,13 @@ public class TripsActivity extends AppCompatActivity implements TripsAdapter.OnT
     Button filterButton;
     Switch switchColumnas;
     ArrayList<Trip> tripsMostrados;
-    ArrayList<Trip> totalTrips;
+    ArrayList<Trip> totalTrips = new ArrayList<>();
     static final int FILTER_REQUEST = 1;
     static final int DETAIL_REQUEST = 2;
     GridLayoutManager gridLayoutManager;
+
     FirebaseUser currentUser;
+    private FirebaseDatabaseService firebaseDatabaseService;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -49,9 +55,94 @@ public class TripsActivity extends AppCompatActivity implements TripsAdapter.OnT
         recyclerView = findViewById(R.id.recyclerView);
         filterButton = findViewById(R.id.button_filtrar);
         switchColumnas = findViewById(R.id.switch_columnas);
-        totalTrips = (ArrayList<Trip>) getIntent().getExtras().get("trips");
+        //totalTrips = (ArrayList<Trip>) getIntent().getExtras().get("trips");
+        firebaseDatabaseService = FirebaseDatabaseService.getServiceInstance();
 
-        boolean vistaSeleccionados = getIntent().hasExtra("selectedTrips");
+
+        ChildEventListener childEventListener = firebaseDatabaseService.getTrip().addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Trip trip = dataSnapshot.getValue(Trip.class);
+                trip.setUid(dataSnapshot.getKey());
+                String msg = "Trip añadido: " + trip.toString();
+                Log.i("TripsApp", msg);
+                totalTrips.add(trip);
+
+                refreshRecyclerView(totalTrips, msg);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Trip trip = dataSnapshot.getValue(Trip.class);
+                trip.setUid(dataSnapshot.getKey());
+                String msg = "Trip modificado: " + trip.toString();
+                Log.i("TripsApp", msg);
+
+                Trip tripChanged = totalTrips.stream()
+                        .filter(t -> t.getUid().equals(dataSnapshot.getKey()))
+                        .findAny()
+                        .orElse(null);
+
+                if (tripChanged != null) {
+                    totalTrips.set(totalTrips.indexOf(tripChanged), trip);
+                }
+
+                refreshRecyclerView(totalTrips, msg);
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Trip trip = dataSnapshot.getValue(Trip.class);
+                trip.setUid(dataSnapshot.getKey());
+                String msg = "Trip eliminado: " + trip.toString();
+                Log.i("TripsApp", msg);
+
+                totalTrips.removeIf(t -> t.getUid().equals(trip.getUid()));
+
+                refreshRecyclerView(totalTrips, msg);
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        /*
+        firebaseDatabaseService.getTrip().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot tripSnapshot : dataSnapshot.getChildren()) {
+                    Trip trip = tripSnapshot.getValue(Trip.class);
+                    Log.i("TripsApp", "Trip en BBDD: " + trip.toString());
+                    totalTrips.add(trip);
+                }
+
+                refreshRecyclerView(totalTrips);
+                //Trip trip = dataSnapshot.getValue(Trip.class);
+                //totalTrips.add(trip);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+         */
+
+
+
+
+
+
+        /*boolean vistaSeleccionados = getIntent().hasExtra("selectedTrips");
 
         if(vistaSeleccionados) {
             ArrayList<Trip>  selectedTrips = (ArrayList<Trip>) getIntent().getExtras().get("selectedTrips");
@@ -62,6 +153,8 @@ public class TripsActivity extends AppCompatActivity implements TripsAdapter.OnT
 
         refreshRecyclerView(tripsMostrados);
 
+         */
+
         int numColumnas = 1;
         if (switchColumnas.isChecked()) {
             numColumnas = 2;
@@ -71,20 +164,18 @@ public class TripsActivity extends AppCompatActivity implements TripsAdapter.OnT
 
         filterButton.setOnClickListener(view -> {
             Intent intent = new Intent(TripsActivity.this, FilterActivity.class);
-            if (vistaSeleccionados) {
+            /*if (vistaSeleccionados) {
                 intent.putExtra("vistaSeleccionados", true);
-            }
+            }*/
             startActivityForResult(intent, FILTER_REQUEST);
         });
     }
 
-    private void refreshRecyclerView(ArrayList<Trip> trips) {
+    private void refreshRecyclerView(ArrayList<Trip> trips, String msg) {
         TripsAdapter adapter = new TripsAdapter(trips, this);
         recyclerView.setAdapter(adapter);
 
-        Snackbar snackbar = Snackbar.make(recyclerView,
-                "Mostrando " + trips.size() + " trips.",
-                Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(recyclerView, msg, Snackbar.LENGTH_LONG);
         snackbar.show();
     }
 
@@ -124,12 +215,12 @@ public class TripsActivity extends AppCompatActivity implements TripsAdapter.OnT
                 int positionMostrados = data.getIntExtra("position", 0);
 
                 tripsMostrados.set(positionMostrados, trip);
-                totalTrips.set(trip.getId(), trip);
+                totalTrips.set(trip.getPosition(), trip);
                 getIntent().putExtra("trips", totalTrips);
             }
         }
 
-        refreshRecyclerView(tripsMostrados);
+        refreshRecyclerView(tripsMostrados, "Aplicando filtro");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

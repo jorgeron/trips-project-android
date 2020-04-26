@@ -7,4 +7,5 @@
     <color name="white">#FFFFFF</color>
     <color name="red_google">#BB2D22</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="green_button">#4CAF50</color>
 </resources>

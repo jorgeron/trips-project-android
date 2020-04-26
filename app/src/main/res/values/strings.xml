@@ -36,17 +36,10 @@
     <string name="signup_created">El usuario se ha registrado correctamente</string>
     <string name="signup_created_error">Se ha producido un error al registrar nuevo usuario</string>
     <string name="welcome">"Bienvenido "</string>
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-
-    <string name="home_second">Home Second</string>
+    <string name="trip_titulo_et_hint">Título</string>
+    <string name="trip_lugar_salida_et_hint">Lugar de salida</string>
+    <string name="trip_fecha_inicio_et_hint">Fecha de inicio</string>
+    <string name="trip_fecha_fin_et_hint">Fecha de fin</string>
+    <string name="trip_precio_et_hint">Precio</string>
+    <string name="create_trip_button_text">Crear viaje</string>
 </resources>

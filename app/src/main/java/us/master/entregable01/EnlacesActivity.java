@@ -35,7 +35,6 @@ public class EnlacesActivity extends AppCompatActivity {
     private Toast backToast;
 
     ArrayList<Enlace> enlaces;
-    //RecyclerView recyclerView;
     ListView listView;
     ArrayList<Trip> trips;
     FirebaseUser currentUser;

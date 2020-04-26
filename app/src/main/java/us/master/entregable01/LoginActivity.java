@@ -195,7 +195,7 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
 
-
+        /*
         firebaseDatabaseService = FirebaseDatabaseService.getServiceInstance();
 
         // Trip trip = Trip.generaTrips(1).get(0);
@@ -291,6 +291,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+         */
     }
 
     @Override
