@@ -40,6 +40,12 @@ public class Util {
         return(fecha.getTimeInMillis()/1000);
     }
 
+    public static Calendar Long2Calendar(Long dateInLong) {
+        Calendar result = Calendar.getInstance();
+        result.setTimeInMillis(dateInLong*1000);
+        return result;
+    }
+
     public static int getRandomNumberInRange(int min, int max) {
 
         if (min >= max) {

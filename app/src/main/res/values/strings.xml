@@ -42,4 +42,6 @@
     <string name="trip_fecha_fin_et_hint">Fecha de fin</string>
     <string name="trip_precio_et_hint">Precio</string>
     <string name="create_trip_button_text">Crear viaje</string>
+    <string name="empty_field_error">Este campo no puede ser vacío</string>
+    <string name="dates_error">La fecha de fin debe ser posterior a la fecha inicio</string>
 </resources>

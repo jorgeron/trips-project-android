@@ -46,7 +46,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".50"
-            android:layout_marginRight="20dp">
+            android:layout_marginRight="20dp" >
 
             <EditText
                 android:id="@+id/trip_fecha_inicio_et"
@@ -56,7 +56,9 @@
                 android:hint="@string/trip_fecha_inicio_et_hint"
                 android:inputType="date"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:focusableInTouchMode="false"
+                android:onClick="setStartDate"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -72,7 +74,9 @@
                 android:maxLines="1"
                 android:inputType="date"
                 android:singleLine="true"
-                android:drawableRight="@drawable/ic_date_range_24dp"/>
+                android:drawableRight="@drawable/ic_date_range_24dp"
+                android:focusableInTouchMode="false"
+                android:onClick="setEndDate" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 

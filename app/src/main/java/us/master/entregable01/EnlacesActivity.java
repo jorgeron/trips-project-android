@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -39,6 +40,7 @@ public class EnlacesActivity extends AppCompatActivity {
     ArrayList<Trip> trips;
     FirebaseUser currentUser;
     TextView textView_welcome;
+    FloatingActionButton floatingActionButton;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -48,6 +50,7 @@ public class EnlacesActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.listView);
         textView_welcome = findViewById(R.id.textView_welcome);
+        floatingActionButton = findViewById(R.id.create_trip_floating_button);
 
         currentUser = (FirebaseUser) getIntent().getExtras().get("currentUser");
         String nombre = currentUser.getDisplayName() != null ? currentUser.getDisplayName() : currentUser.getEmail();
@@ -78,6 +81,14 @@ public class EnlacesActivity extends AppCompatActivity {
         };
 
         listView.setOnItemClickListener(listener);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EnlacesActivity.this, TripFormActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

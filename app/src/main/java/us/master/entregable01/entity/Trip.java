@@ -20,7 +20,7 @@ public class Trip implements Serializable {
     private String titulo;
     private String lugarSalida;
     private String urlImagen;
-    private long fechaInicio, fechaFin;
+    private Long fechaInicio, fechaFin;
     private Integer precio;
     private boolean seleccionado;
     private boolean comprado;
@@ -28,7 +28,7 @@ public class Trip implements Serializable {
     public Trip() {
     }
 
-    public Trip(String uid, int position, String titulo, String lugarSalida, String urlImagen, long fechaInicio, long fechaFin, Integer precio, boolean seleccionado, boolean comprado) {
+    public Trip(String uid, int position, String titulo, String lugarSalida, String urlImagen, Long fechaInicio, Long fechaFin, Integer precio, boolean seleccionado, boolean comprado) {
         this.uid = uid;
         this.position = position;
         this.titulo = titulo;
@@ -81,19 +81,19 @@ public class Trip implements Serializable {
         this.urlImagen = urlImagen;
     }
 
-    public long getFechaInicio() {
+    public Long getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(long fechaInicio) {
+    public void setFechaInicio(Long fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public long getFechaFin() {
+    public Long getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(long fechaFin) {
+    public void setFechaFin(Long fechaFin) {
         this.fechaFin = fechaFin;
     }
 
@@ -129,8 +129,6 @@ public class Trip implements Serializable {
         Trip trip = (Trip) o;
 
         if (position != trip.position) return false;
-        if (fechaInicio != trip.fechaInicio) return false;
-        if (fechaFin != trip.fechaFin) return false;
         if (seleccionado != trip.seleccionado) return false;
         if (comprado != trip.comprado) return false;
         if (uid != null ? !uid.equals(trip.uid) : trip.uid != null) return false;
@@ -138,6 +136,10 @@ public class Trip implements Serializable {
         if (lugarSalida != null ? !lugarSalida.equals(trip.lugarSalida) : trip.lugarSalida != null)
             return false;
         if (urlImagen != null ? !urlImagen.equals(trip.urlImagen) : trip.urlImagen != null)
+            return false;
+        if (fechaInicio != null ? !fechaInicio.equals(trip.fechaInicio) : trip.fechaInicio != null)
+            return false;
+        if (fechaFin != null ? !fechaFin.equals(trip.fechaFin) : trip.fechaFin != null)
             return false;
         return precio != null ? precio.equals(trip.precio) : trip.precio == null;
     }
@@ -149,8 +151,8 @@ public class Trip implements Serializable {
         result = 31 * result + (titulo != null ? titulo.hashCode() : 0);
         result = 31 * result + (lugarSalida != null ? lugarSalida.hashCode() : 0);
         result = 31 * result + (urlImagen != null ? urlImagen.hashCode() : 0);
-        result = 31 * result + (int) (fechaInicio ^ (fechaInicio >>> 32));
-        result = 31 * result + (int) (fechaFin ^ (fechaFin >>> 32));
+        result = 31 * result + (fechaInicio != null ? fechaInicio.hashCode() : 0);
+        result = 31 * result + (fechaFin != null ? fechaFin.hashCode() : 0);
         result = 31 * result + (precio != null ? precio.hashCode() : 0);
         result = 31 * result + (seleccionado ? 1 : 0);
         result = 31 * result + (comprado ? 1 : 0);
