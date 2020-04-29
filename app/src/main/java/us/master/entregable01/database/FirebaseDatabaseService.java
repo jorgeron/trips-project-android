@@ -1,4 +1,4 @@
-package us.master.entregable01;
+package us.master.entregable01.database;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;

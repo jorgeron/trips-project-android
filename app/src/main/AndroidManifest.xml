@@ -11,12 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TripFormActivity"></activity>
+        <activity android:name=".TripDetailsActivity" />
+        <activity android:name=".TripListActivity" />
+        <activity android:name=".TripFormActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".SelectedTripsActivity" />
         <activity android:name=".FilterActivity" />
-        <activity android:name=".TripDetailActivity" />
         <activity android:name=".EnlacesActivity" />
         <activity android:name=".SplashActivity">
             <intent-filter>
@@ -25,8 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TripsActivity" />
-        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

@@ -25,24 +25,25 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import us.master.entregable01.database.FirebaseDatabaseService;
+import us.master.entregable01.database.FirestoreService;
 import us.master.entregable01.entity.Trip;
-import us.master.entregable01.entity.Util;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -59,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private ValueEventListener valueEventListener;
     private FirebaseDatabaseService firebaseDatabaseService;
+    private FirestoreService firestoreService;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -189,6 +191,19 @@ public class LoginActivity extends AppCompatActivity {
     private void checkUserDatabaseLogin(FirebaseUser user) {
         //TODO
         Toast.makeText(this, String.format(getString(R.string.login_completed), user.getEmail()), Toast. LENGTH_LONG).show();
+
+        firestoreService = FirestoreService.getServiceInstance();
+        firestoreService.getTrips(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<Trip> lista = new ArrayList<>();
+                for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()) {
+                    Trip t = documentSnapshot.toObject(Trip.class);
+                    lista.add(t);
+                }
+                Log.i("Tripstaa", "lista de trips: " + lista);
+            }
+        });
 
         Intent intent = new Intent(LoginActivity.this, EnlacesActivity.class);
         intent.putExtra("currentUser", user);

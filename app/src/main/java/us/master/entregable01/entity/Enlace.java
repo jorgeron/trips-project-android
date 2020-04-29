@@ -1,12 +1,10 @@
 package us.master.entregable01.entity;
 
-import android.graphics.drawable.Drawable;
-
 import java.util.ArrayList;
 
 import us.master.entregable01.R;
 import us.master.entregable01.SelectedTripsActivity;
-import us.master.entregable01.TripsActivity;
+import us.master.entregable01.TripListActivity;
 
 public class Enlace {
 
@@ -46,7 +44,7 @@ public class Enlace {
 
     public static ArrayList<Enlace> generaEnlaces() {
         ArrayList<Enlace> result = new ArrayList<>();
-        result.add(new Enlace("Viajes disponibles", R.drawable.available_trips, TripsActivity.class));
+        result.add(new Enlace("Viajes disponibles", R.drawable.available_trips, TripListActivity.class));
         result.add(new Enlace("Viajes seleccionados", R.drawable.selected, SelectedTripsActivity.class));
 
         return result;

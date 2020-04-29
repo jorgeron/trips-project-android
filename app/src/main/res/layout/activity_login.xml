@@ -80,11 +80,12 @@
                 android:text="@string/login_button_google_text"
                 android:textColor="@color/white" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:layout_marginTop="54dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/login_button_register"
+                android:drawableLeft="@drawable/ic_person_add_24dp"
                 android:backgroundTint="@color/transparent"
                 android:textAllCaps="true"
                 android:text="@string/login_button_register_text"

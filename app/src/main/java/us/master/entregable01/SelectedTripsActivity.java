@@ -1,5 +1,6 @@
 package us.master.entregable01;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,43 +9,30 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import us.master.entregable01.adapter.TripsAdapter;
+import us.master.entregable01.database.FirestoreService;
 import us.master.entregable01.entity.Trip;
 
 public class SelectedTripsActivity extends AppCompatActivity {
-
-    FirebaseUser currentUser;
-    ArrayList<Trip> selectedTrips;
-    ArrayList<Trip> totalTrips;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        currentUser = (FirebaseUser) getIntent().getExtras().get("currentUser");
-
-        if (getIntent().hasExtra("trips")) {
-            totalTrips = (ArrayList<Trip>) getIntent().getExtras().get("trips");
-            selectedTrips = (ArrayList<Trip>) totalTrips.stream()
-                    .filter(trip->trip.isSeleccionado()).collect(Collectors.toList());
-        } else {
-            selectedTrips = new ArrayList<>();
-            totalTrips = null;
-        }
-
-
-        Intent intent = new Intent(SelectedTripsActivity.this, TripsActivity.class);
-        intent.putExtra("trips", totalTrips);
-        intent.putExtra("selectedTrips", selectedTrips);
-        intent.putExtra("currentUser", currentUser);
+        Intent intent = new Intent(SelectedTripsActivity.this, TripListActivity.class);
+        intent.putExtra("vistaSeleccionados", true);
         startActivity(intent);
         finish();
-
     }
 }

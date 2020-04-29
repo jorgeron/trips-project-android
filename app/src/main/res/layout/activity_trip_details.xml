@@ -1,41 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TripDetailActivity">
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".TripDetailsActivity">
 
     <ImageView
         android:id="@+id/imageView_trip_detail"
-        android:layout_width="418dp"
-        android:layout_height="189dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         app:srcCompat="@android:drawable/ic_menu_mapmode" />
 
     <TextView
         android:id="@+id/textView_trip_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="TextView"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_trip_detail" />
+        android:textAlignment="center" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="402dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_trip_title">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -104,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text=""
+                android:text="TextView"
                 android:textAlignment="center"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -128,18 +123,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:text="TextView"
                 android:textAlignment="center"
                 android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
+            android:layout_marginEnd="80dp"
             android:orientation="horizontal">
 
             <Switch
                 android:id="@+id/switch_seleccionado"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:onClick="onSwitchSeleccionado"
@@ -153,14 +151,33 @@
 
     <Button
         android:id="@+id/buttonComprar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="40dp"
-        android:text="@string/comprar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintVertical_bias="0.228" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:backgroundTint="@color/green_button"
+        android:drawableLeft="@drawable/ic_monetization_on_24dp"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:text="@string/comprar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp" />
+
+
+    <Button
+        android:id="@+id/delete_trip_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/red_google"
+        android:drawableLeft="@drawable/ic_delete_24dp"
+        android:text="@string/delete_trip"
+        android:textAllCaps="true"
+        android:textColor="@color/white" />
+
+</LinearLayout>

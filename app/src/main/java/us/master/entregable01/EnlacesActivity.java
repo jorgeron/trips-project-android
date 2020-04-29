@@ -37,9 +37,6 @@ public class EnlacesActivity extends AppCompatActivity {
 
     ArrayList<Enlace> enlaces;
     ListView listView;
-    ArrayList<Trip> trips;
-    FirebaseUser currentUser;
-    TextView textView_welcome;
     FloatingActionButton floatingActionButton;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -49,20 +46,9 @@ public class EnlacesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_enlaces);
 
         listView = findViewById(R.id.listView);
-        textView_welcome = findViewById(R.id.textView_welcome);
         floatingActionButton = findViewById(R.id.create_trip_floating_button);
 
-        currentUser = (FirebaseUser) getIntent().getExtras().get("currentUser");
-        String nombre = currentUser.getDisplayName() != null ? currentUser.getDisplayName() : currentUser.getEmail();
-        textView_welcome.setText(getString(R.string.welcome) + nombre);
-
         enlaces = Enlace.generaEnlaces();
-
-        if (getIntent().hasExtra("trips")) {
-            trips = (ArrayList<Trip>) getIntent().getExtras().get("trips");
-        } else {
-            trips = Trip.generaTrips(50);
-        }
 
         EnlacesAdapter adaptador = new EnlacesAdapter(EnlacesActivity.this, enlaces);
         listView.setAdapter(adaptador);
@@ -72,10 +58,8 @@ public class EnlacesActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Enlace seleccionado = (Enlace) parent.getItemAtPosition(position);
                 Intent intent = new Intent(EnlacesActivity.this, seleccionado.getClase());
-                intent.putExtra("trips", trips);
-                intent.putExtra("currentUser", currentUser);
+
                 startActivity(intent);
-                finish();
                 // podría hacerlo también con método onResume
             }
         };

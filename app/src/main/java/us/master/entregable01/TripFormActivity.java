@@ -1,7 +1,6 @@
 package us.master.entregable01;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -12,15 +11,15 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import us.master.entregable01.database.FirestoreService;
 import us.master.entregable01.entity.Trip;
 import us.master.entregable01.entity.Util;
 
@@ -40,7 +39,7 @@ public class TripFormActivity extends AppCompatActivity {
 
     private Calendar currentDate = Calendar.getInstance();
     private Trip trip;
-    private FirebaseDatabaseService firebaseDatabaseService;
+    private FirestoreService firestoreService;
 
 
     @Override
@@ -93,16 +92,17 @@ public class TripFormActivity extends AppCompatActivity {
                     trip.setLugarSalida(trip_lugar_salida_et.getText().toString());
                     trip.setPrecio(Integer.parseInt(trip_precio_et.getText().toString()));
 
-                    firebaseDatabaseService = FirebaseDatabaseService.getServiceInstance();
 
-                    firebaseDatabaseService.saveTrip(trip, new DatabaseReference.CompletionListener() {
+                    firestoreService = FirestoreService.getServiceInstance();
+
+                    firestoreService.saveTrip(trip, new OnCompleteListener<DocumentReference>() {
                         @Override
-                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                            if (databaseError == null) {
+                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                            if (task.isSuccessful()) {
                                 Log.i("TripsApp", "Viaje insertado");
                                 finish();
                             } else {
-                                Log.i("TripsApp", "Error al insertar viaje " + databaseError.getMessage());
+                                Log.i("TripsApp", "Error al insertar viaje " + task.getException());
                                 Toast.makeText(TripFormActivity.this, R.string.trip_created_error, Toast.LENGTH_LONG).show();
                             }
                         }

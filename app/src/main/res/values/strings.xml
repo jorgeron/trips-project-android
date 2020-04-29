@@ -45,4 +45,7 @@
     <string name="empty_field_error">Este campo no puede ser vacío</string>
     <string name="dates_error">La fecha de fin debe ser posterior a la fecha inicio</string>
     <string name="trip_created_error">Error al crear el viaje</string>
+    <string name="delete_trip">Borrar viaje</string>
+    <string name="edit_trip">Editar viaje</string>
+    <string name="no_trips">No existen viajes</string>
 </resources>

@@ -20,7 +20,6 @@ public class FilterActivity extends AppCompatActivity {
     private EditText precio_max;
     private Calendar currentDate = Calendar.getInstance();
     private Calendar startDate, endDate;
-    private boolean vistaSeleccionados = false;
 
 
     @Override
@@ -31,7 +30,6 @@ public class FilterActivity extends AppCompatActivity {
         textView_startDate = findViewById(R.id.textView_startdate);
         textView_endDate = findViewById(R.id.textView_enddate);
         precio_max = findViewById(R.id.editText_precio_max);
-        vistaSeleccionados = getIntent().getBooleanExtra("vistaSeleccionados", false);
     }
 
     public void setStartDate(View view) {
@@ -79,11 +77,11 @@ public class FilterActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent();
+        intent.putExtra("hayFiltros", true);
         intent.putExtra("startDate", startDate);
         intent.putExtra("endDate", endDate);
         intent.putExtra("precioMaximo", precio_maximo);
         intent.putExtra("requestCode", 1);
-        intent.putExtra("vistaSeleccionados", vistaSeleccionados);
         setResult(RESULT_OK, intent);
         finish();
     }
