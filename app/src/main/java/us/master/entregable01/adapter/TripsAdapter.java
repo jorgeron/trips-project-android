@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Objects;
 
 import us.master.entregable01.R;
+import us.master.entregable01.TripListActivity;
 import us.master.entregable01.database.FirestoreService;
 import us.master.entregable01.entity.Trip;
 import us.master.entregable01.entity.Util;
@@ -81,12 +83,20 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
             holder.imgChecked.setImageResource(R.drawable.ic_check_circle_24dp);
         }
 
-        Picasso.get().setLoggingEnabled(true);
-        Picasso.get()
+        Glide.with(holder.imagen.getContext())
                 .load(trip.getUrlImagen())
                 .placeholder(R.drawable.available_trips)
+                .centerCrop()
                 .into(holder.imagen);
 
+        /*Picasso.get().setLoggingEnabled(true);
+        Picasso.get()
+                .load(trip.getUrlImagen())
+                .fit().centerInside()
+                .rotate(90)
+                .placeholder(R.drawable.available_trips)
+                .into(holder.imagen);
+        */
     }
 
 

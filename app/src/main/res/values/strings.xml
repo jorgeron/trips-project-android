@@ -48,4 +48,9 @@
     <string name="delete_trip">Borrar viaje</string>
     <string name="edit_trip">Editar viaje</string>
     <string name="no_trips">No existen viajes</string>
+    <string name="take_picture">Obtener imagen</string>
+    <string name="take_picture_rationale">Necesitas dar permiso de acceso a la cámara</string>
+    <string name="take_picture_rationale_ok">Permitir</string>
+    <string name="camera_not_granted">No es posible usar esta función sin permisos de la cámara</string>
+    <string name="storage_not_granted">No se puede realizar la función sin permisos de almacenamiento externo</string>
 </resources>

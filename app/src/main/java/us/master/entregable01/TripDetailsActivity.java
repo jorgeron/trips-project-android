@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -167,11 +168,22 @@ public class TripDetailsActivity extends AppCompatActivity {
         }
         button_comprar.setEnabled(!trip.isComprado());
 
+        Glide.with(TripDetailsActivity.this)
+                .load(trip.getUrlImagen())
+                .placeholder(R.drawable.available_trips)
+                .centerCrop()
+                .into(imageView_trip);
+
+        /*
         Picasso.get().setLoggingEnabled(true);
         Picasso.get()
                 .load(trip.getUrlImagen())
+                .fit().centerInside()
+                .rotate(90)
                 .placeholder(R.drawable.available_trips)
                 .into(imageView_trip);
+
+         */
 
 
     }
