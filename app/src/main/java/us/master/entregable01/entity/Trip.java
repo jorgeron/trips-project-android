@@ -4,6 +4,9 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.GeoPoint;
+
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
@@ -24,11 +27,12 @@ public class Trip implements Serializable {
     private Integer precio;
     private boolean seleccionado;
     private boolean comprado;
+    private GeoPoint coordenadasSalida;
 
     public Trip() {
     }
 
-    public Trip(String uid, int position, String titulo, String lugarSalida, String urlImagen, Long fechaInicio, Long fechaFin, Integer precio, boolean seleccionado, boolean comprado) {
+    public Trip(String uid, int position, String titulo, String lugarSalida, String urlImagen, Long fechaInicio, Long fechaFin, Integer precio, boolean seleccionado, boolean comprado, GeoPoint coordenadasSalida) {
         this.uid = uid;
         this.position = position;
         this.titulo = titulo;
@@ -39,6 +43,7 @@ public class Trip implements Serializable {
         this.precio = precio;
         this.seleccionado = seleccionado;
         this.comprado = comprado;
+        this.coordenadasSalida = coordenadasSalida;
     }
 
     public String getUid() {
@@ -121,6 +126,14 @@ public class Trip implements Serializable {
         this.comprado = comprado;
     }
 
+    public GeoPoint getCoordenadasSalida() {
+        return coordenadasSalida;
+    }
+
+    public void setCoordenadasSalida(GeoPoint coordenadasSalida) {
+        this.coordenadasSalida = coordenadasSalida;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -141,7 +154,8 @@ public class Trip implements Serializable {
             return false;
         if (fechaFin != null ? !fechaFin.equals(trip.fechaFin) : trip.fechaFin != null)
             return false;
-        return precio != null ? precio.equals(trip.precio) : trip.precio == null;
+        if (precio != null ? !precio.equals(trip.precio) : trip.precio != null) return false;
+        return coordenadasSalida != null ? coordenadasSalida.equals(trip.coordenadasSalida) : trip.coordenadasSalida == null;
     }
 
     @Override
@@ -156,8 +170,10 @@ public class Trip implements Serializable {
         result = 31 * result + (precio != null ? precio.hashCode() : 0);
         result = 31 * result + (seleccionado ? 1 : 0);
         result = 31 * result + (comprado ? 1 : 0);
+        result = 31 * result + (coordenadasSalida != null ? coordenadasSalida.hashCode() : 0);
         return result;
     }
+
 
     @Override
     public String toString() {
@@ -172,6 +188,7 @@ public class Trip implements Serializable {
                 ", precio=" + precio +
                 ", seleccionado=" + seleccionado +
                 ", comprado=" + comprado +
+                ", coordenadasSalida=" + coordenadasSalida +
                 '}';
     }
 
@@ -188,8 +205,9 @@ public class Trip implements Serializable {
             Calendar fechaFin = Util.generateRandomDateBetween(fechaInicio.toInstant(), fechaInicio.toInstant().plus(Duration.ofDays(31)));
             boolean seleccionado = false;
             boolean comprado = false;
+            GeoPoint coord = new GeoPoint(0,0);
 
-            list.add(new Trip(null, i, titulo, lugarSalida, urlimg, Util.Calendar2long(fechaInicio), Util.Calendar2long(fechaFin), precio, seleccionado, comprado));
+            list.add(new Trip(null, i, titulo, lugarSalida, urlimg, Util.Calendar2long(fechaInicio), Util.Calendar2long(fechaFin), precio, seleccionado, comprado, coord));
         }
         return list;
     }

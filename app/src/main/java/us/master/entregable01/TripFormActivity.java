@@ -25,6 +25,14 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -34,6 +42,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -46,7 +55,7 @@ import us.master.entregable01.database.FirestoreService;
 import us.master.entregable01.entity.Trip;
 import us.master.entregable01.entity.Util;
 
-public class TripFormActivity extends AppCompatActivity {
+public class TripFormActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int CAMERA_PERMISSION_REQUEST = 0x512;
     private static final int WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST = 0x513;
@@ -67,6 +76,8 @@ public class TripFormActivity extends AppCompatActivity {
     private Button take_picture_button;
     private ImageView take_picture_img;
     private ProgressBar progressBar;
+
+    private GoogleMap googleMap;
 
     private Calendar currentDate = Calendar.getInstance();
     private Trip trip;
@@ -97,6 +108,9 @@ public class TripFormActivity extends AppCompatActivity {
         take_picture_img = findViewById(R.id.take_picture_img);
         progressBar = findViewById(R.id.progress_bar_img);
         progressBar.setVisibility(View.GONE);
+
+        SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        supportMapFragment.getMapAsync(this);
         
         take_picture_button.setOnClickListener(l -> {
             takePicture();
@@ -310,5 +324,23 @@ public class TripFormActivity extends AppCompatActivity {
 
         dialog.getDatePicker().setMinDate(minDate.getTimeInMillis());
         dialog.show();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                GeoPoint geoPoint = new GeoPoint(latLng.latitude, latLng.longitude);
+
+                googleMap.addMarker(new MarkerOptions()
+                .position(latLng));
+
+                googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                trip.setCoordenadasSalida(geoPoint);
+            }
+        });
     }
 }
