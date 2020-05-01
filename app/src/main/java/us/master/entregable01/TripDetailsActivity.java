@@ -13,10 +13,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -31,6 +39,7 @@ import us.master.entregable01.entity.Util;
 
 public class TripDetailsActivity extends AppCompatActivity {
 
+    ScrollView scrollView;
     LinearLayout linearLayout;
     TextView textView_title,textView_precio, textView_fechaSalida, textView_fechaLlegada, textView_lugarSalida;
     ImageView imageView_trip;
@@ -38,6 +47,8 @@ public class TripDetailsActivity extends AppCompatActivity {
     Button button_comprar, button_delete;
     Trip trip;
     final Context context = this;
+
+    private GoogleMap gMap;
 
     String idTrip;
     FirestoreService firestoreService;
@@ -47,6 +58,7 @@ public class TripDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_details);
 
+        scrollView=findViewById(R.id.scroll_view);
         linearLayout=findViewById(R.id.linearLayout);
         textView_title=findViewById(R.id.textView_trip_title);
         textView_precio=findViewById(R.id.textView_trip_precio);
@@ -174,16 +186,35 @@ public class TripDetailsActivity extends AppCompatActivity {
                 .centerCrop()
                 .into(imageView_trip);
 
-        /*
-        Picasso.get().setLoggingEnabled(true);
-        Picasso.get()
-                .load(trip.getUrlImagen())
-                .fit().centerInside()
-                .rotate(90)
-                .placeholder(R.drawable.available_trips)
-                .into(imageView_trip);
 
-         */
+        findViewById(R.id.map).setVisibility(View.GONE);
+        if (trip.getCoordenadasSalida() != null) {
+            findViewById(R.id.map).setVisibility(View.VISIBLE);
+            SupportMapFragment supportMapFragment = (WorkaroundMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+            supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap)
+                {
+                    LatLng coordSalida = new LatLng(trip.getCoordenadasSalida().getLatitude(), trip.getCoordenadasSalida().getLongitude());
+                    gMap = googleMap;
+                    gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    gMap.getUiSettings().setZoomControlsEnabled(true);
+                    gMap.addMarker(new MarkerOptions()
+                            .position(coordSalida));
+
+                    gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordSalida, 15.5f), 4000, null);
+
+                    ((WorkaroundMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
+                            .setListener(new WorkaroundMapFragment.OnTouchListener() {
+                                @Override
+                                public void onTouch()
+                                {
+                                    scrollView.requestDisallowInterceptTouchEvent(true);
+                                }
+                            });
+                }
+            });
+        }
 
 
     }

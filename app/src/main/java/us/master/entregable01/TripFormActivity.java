@@ -352,9 +352,10 @@ public class TripFormActivity extends AppCompatActivity implements OnMapReadyCal
                 GeoPoint geoPoint = new GeoPoint(latLng.latitude, latLng.longitude);
 
                 googleMap.addMarker(new MarkerOptions()
-                .position(latLng));
+                    .position(latLng));
 
                 googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                googleMap.getUiSettings().setZoomControlsEnabled(true);
                 trip.setCoordenadasSalida(geoPoint);
             }
         });
