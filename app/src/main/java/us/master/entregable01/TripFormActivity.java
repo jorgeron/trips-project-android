@@ -22,6 +22,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -61,6 +62,8 @@ public class TripFormActivity extends AppCompatActivity implements OnMapReadyCal
     private static final int WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST = 0x513;
     private static final int TAKE_PHOTO_CODE = 0x514;
 
+    private ScrollView scrollView;
+
     private EditText trip_titulo_et;
     private EditText trip_lugar_salida_et;
     private EditText trip_fecha_inicio_et;
@@ -92,6 +95,8 @@ public class TripFormActivity extends AppCompatActivity implements OnMapReadyCal
 
         trip = new Trip();
 
+        scrollView = findViewById(R.id.scroll_view);
+
         trip_titulo_et = findViewById(R.id.trip_titulo_et);
         trip_lugar_salida_et = findViewById(R.id.trip_lugar_salida_et);
         trip_fecha_inicio_et = findViewById(R.id.trip_fecha_inicio_et);
@@ -109,7 +114,7 @@ public class TripFormActivity extends AppCompatActivity implements OnMapReadyCal
         progressBar = findViewById(R.id.progress_bar_img);
         progressBar.setVisibility(View.GONE);
 
-        SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment supportMapFragment = (WorkaroundMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         supportMapFragment.getMapAsync(this);
         
         take_picture_button.setOnClickListener(l -> {
@@ -329,6 +334,17 @@ public class TripFormActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
+        googleMap.getUiSettings().setZoomGesturesEnabled(true);
+
+        ((WorkaroundMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
+                .setListener(new WorkaroundMapFragment.OnTouchListener() {
+                    @Override
+                    public void onTouch()
+                    {
+                        scrollView.requestDisallowInterceptTouchEvent(true);
+                    }
+                });
+
 
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
