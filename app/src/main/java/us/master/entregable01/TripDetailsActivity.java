@@ -8,7 +8,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,6 +20,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -37,7 +40,7 @@ import us.master.entregable01.database.FirestoreService;
 import us.master.entregable01.entity.Trip;
 import us.master.entregable01.entity.Util;
 
-public class TripDetailsActivity extends AppCompatActivity {
+public class TripDetailsActivity extends AppCompatActivity implements LocationListener {
 
     ScrollView scrollView;
     LinearLayout linearLayout;
@@ -216,7 +219,6 @@ public class TripDetailsActivity extends AppCompatActivity {
             });
         }
 
-
     }
 
 
@@ -227,5 +229,10 @@ public class TripDetailsActivity extends AppCompatActivity {
         setResult(RESULT_OK, intent);
 
         super.onBackPressed();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.i("tripsapp", "cambio loc: " + location.getLatitude() + " " + location.getLongitude());
     }
 }

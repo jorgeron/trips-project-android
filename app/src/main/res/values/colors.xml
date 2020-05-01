@@ -9,4 +9,5 @@
     <color name="transparent">#00FFFFFF</color>
     <color name="green_button">#4CAF50</color>
     <color name="light_blue">#84FFFF</color>
+    <color name="black">#000000</color>
 </resources>

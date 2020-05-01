@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".TripsActivity" >
+    tools:context=".TripListActivity" >
 
     <androidx.cardview.widget.CardView
         android:id="@+id/trip_item_cardview"
@@ -18,41 +18,42 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="150dp"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/imageView_trip"
-                android:layout_width="126dp"
-                android:layout_height="131dp"
+                android:layout_width="130dp"
+                android:layout_height="match_parent"
                 app:srcCompat="@android:drawable/ic_menu_mapmode"
                 tools:srcCompat="@android:drawable/ic_menu_myplaces" />
 
             <LinearLayout
-                android:layout_width="284dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="38dp"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/textView_ciudad"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="3"
                         android:text="TextView"
                         android:textSize="18sp"
                         android:textStyle="bold"
+                        android:textColor="@color/black"
                         android:layout_marginStart="5dp"
                         android:layout_marginVertical="5dp"/>
 
                     <ImageView
                         android:id="@+id/imageView_checked"
                         android:layout_width="51dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_margin="5dp"
                         app:srcCompat="@android:drawable/checkbox_on_background" />
@@ -61,9 +62,19 @@
                 <TextView
                     android:id="@+id/textView_description"
                     android:layout_width="match_parent"
-                    android:layout_height="92dp"
+                    android:layout_height="90dp"
                     android:layout_marginStart="5dp"
                     android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/textView_distance"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:gravity="right"
+                    android:text="TextView" />
+
             </LinearLayout>
         </LinearLayout>
 

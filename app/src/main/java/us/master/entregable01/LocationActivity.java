@@ -6,9 +6,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +25,7 @@ import com.google.android.material.snackbar.Snackbar;
 public class LocationActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_CODE_LOCATION = 0x123;
+    public static Location lastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,8 @@ public class LocationActivity extends AppCompatActivity {
             } else {
                 ActivityCompat.requestPermissions(LocationActivity.this, permissions, PERMISSION_REQUEST_CODE_LOCATION);
             }
+        } else {
+            startLocationService();
         }
     }
 
@@ -72,6 +77,9 @@ public class LocationActivity extends AppCompatActivity {
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY); //Prioridad de este sistema de localización dentro de la APP. Puede aprovechar localización de otras APPs
         //locationRequest.setSmallestDisplacement(10); //Si el usuario no se desplaza más de Xmetros, no actualiza localización
         locationServices.requestLocationUpdates(locationRequest, locationCallback, null);
+
+        Intent intent = new Intent(LocationActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 
     LocationCallback locationCallback = new LocationCallback() {
@@ -81,8 +89,8 @@ public class LocationActivity extends AppCompatActivity {
                 return;
             }
 
-            Location location = locationResult.getLastLocation();
-            Log.i("TripsApp", "Location: " + location.getLatitude() + ", " + location.getLongitude() + ", acc: " + location.getAccuracy());
+            lastLocation = locationResult.getLastLocation();
+            Log.i("TripsApp", "Location: " + lastLocation.getLatitude() + ", " + lastLocation.getLongitude() + ", acc: " + lastLocation.getAccuracy());
         }
     };
 

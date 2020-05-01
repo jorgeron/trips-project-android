@@ -1,6 +1,8 @@
 package us.master.entregable01.adapter;
 
 import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +14,12 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
@@ -24,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import us.master.entregable01.LocationActivity;
 import us.master.entregable01.R;
 import us.master.entregable01.TripListActivity;
 import us.master.entregable01.database.FirestoreService;
@@ -77,7 +82,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
         holder.textViewCiudadDestino.setText("Salida: " + trip.getLugarSalida() +
                 "\nFecha salida: " + fechaInicioFormateada +
                 "\nFecha fin: " + fechaFinFormateada +
-                "\nPrecio: " + trip.getPrecio());
+                "\nPrecio: " + trip.getPrecio() + " €");
         holder.imgChecked.setImageDrawable(null);
         if (trip.isSeleccionado()) {
             holder.imgChecked.setImageResource(R.drawable.ic_check_circle_24dp);
@@ -89,16 +94,42 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
                 .centerCrop()
                 .into(holder.imagen);
 
-        /*Picasso.get().setLoggingEnabled(true);
-        Picasso.get()
-                .load(trip.getUrlImagen())
-                .fit().centerInside()
-                .rotate(90)
-                .placeholder(R.drawable.available_trips)
-                .into(holder.imagen);
-        */
+        int distancia = calculaDistancia(trip);
+        holder.textViewDistancia.setText(muestraTextoDistancia(distancia));
+
     }
 
+    private int calculaDistancia(Trip trip) {
+        int result = 0;
+
+        if (trip.getCoordenadasSalida() != null) {
+            Location tripLocation = new Location(LocationManager.GPS_PROVIDER);
+            tripLocation.setLatitude(trip.getCoordenadasSalida().getLatitude());
+            tripLocation.setLongitude(trip.getCoordenadasSalida().getLongitude());
+
+            //GeoPoint userLocation = new GeoPoint(LocationActivity.lastLocation.getLatitude(), LocationActivity.lastLocation.getLongitude());
+            result = (int) tripLocation.distanceTo(LocationActivity.lastLocation);
+        }
+
+        return result;
+    }
+
+    private String muestraTextoDistancia(int distancia) {
+        String result = "A ";
+
+        if (distancia > 0) {
+
+            if (distancia < 2000) {
+                result = result + distancia + " m";
+            } else {
+                result = result + (distancia/1000) + " km";
+            }
+        } else {
+            result = null;
+        }
+
+        return result;
+    }
 
 
     @Override
@@ -127,8 +158,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView textViewTitulo;
-        public TextView textViewCiudadDestino;
+        public TextView textViewTitulo, textViewCiudadDestino, textViewDistancia;
         public ImageView imagen;
         public ImageView imgChecked;
         OnTripListener onTripListener;
@@ -137,6 +167,7 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
             super(itemView);
             textViewTitulo = itemView.findViewById(R.id.textView_ciudad);
             textViewCiudadDestino = itemView.findViewById(R.id.textView_description);
+            textViewDistancia = itemView.findViewById(R.id.textView_distance);
             imagen = itemView.findViewById(R.id.imageView_trip);
             imgChecked = itemView.findViewById(R.id.imageView_checked);
 
