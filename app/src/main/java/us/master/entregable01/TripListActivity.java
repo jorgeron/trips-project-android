@@ -124,16 +124,19 @@ import us.master.entregable01.entity.Util;
      protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
          super.onActivityResult(requestCode, resultCode, data);
 
-         hayFiltros = data.getBooleanExtra("hayFiltros", false);
-         Calendar fechaInicio = (Calendar) data.getExtras().get("startDate");
-         Calendar fechaFin = (Calendar) data.getExtras().get("endDate");
-         Integer precioMax = (Integer) data.getExtras().get("precioMaximo");
+         Calendar fechaInicio = null;
+         Calendar fechaFin = null;
+         Integer precioMax = null;
+
+         if (data != null && data.hasExtra("hayFiltros")) {
+             hayFiltros = data.getBooleanExtra("hayFiltros", false);
+             fechaInicio = (Calendar) data.getExtras().get("startDate");
+             fechaFin = (Calendar) data.getExtras().get("endDate");
+             precioMax = (Integer) data.getExtras().get("precioMaximo");
+         }
 
 
          if (requestCode == FILTER_REQUEST && resultCode == RESULT_OK) {
-             /*aplicarFiltros(fechaInicio, fechaFin, precioMax);
-             tripListAdapter.notifyDataSetChanged();
-              */
              Intent intent = new Intent(TripListActivity.this, TripListActivity.class);
              intent.putExtra("vistaSeleccionados", vistaSeleccionados);
 

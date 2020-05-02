@@ -1,6 +1,7 @@
 package us.master.entregable01.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.view.LayoutInflater;
@@ -94,41 +95,14 @@ public class TripsAdapter extends RecyclerView.Adapter<TripsAdapter.ViewHolder> 
                 .centerCrop()
                 .into(holder.imagen);
 
-        int distancia = calculaDistancia(trip);
-        holder.textViewDistancia.setText(muestraTextoDistancia(distancia));
-
-    }
-
-    private int calculaDistancia(Trip trip) {
-        int result = 0;
-
-        if (trip.getCoordenadasSalida() != null) {
-            Location tripLocation = new Location(LocationManager.GPS_PROVIDER);
-            tripLocation.setLatitude(trip.getCoordenadasSalida().getLatitude());
-            tripLocation.setLongitude(trip.getCoordenadasSalida().getLongitude());
-
-            //GeoPoint userLocation = new GeoPoint(LocationActivity.lastLocation.getLatitude(), LocationActivity.lastLocation.getLongitude());
-            result = (int) tripLocation.distanceTo(LocationActivity.lastLocation);
-        }
-
-        return result;
-    }
-
-    private String muestraTextoDistancia(int distancia) {
-        String result = "A ";
-
-        if (distancia > 0) {
-
-            if (distancia < 2000) {
-                result = result + distancia + " m";
-            } else {
-                result = result + (distancia/1000) + " km";
-            }
+        int distancia = Util.calculaDistancia(LocationActivity.lastLocation, trip);
+        holder.textViewDistancia.setText(Util.muestraTextoDistancia(distancia));
+        if(distancia > 2000) {
+            holder.textViewDistancia.setTextColor(Color.RED);
         } else {
-            result = null;
+            holder.textViewDistancia.setTextColor(Color.rgb(0,216,56));
         }
 
-        return result;
     }
 
 

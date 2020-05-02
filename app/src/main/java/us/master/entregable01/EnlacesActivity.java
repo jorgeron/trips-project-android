@@ -82,6 +82,7 @@ public class EnlacesActivity extends AppCompatActivity {
             backToast.cancel();
             FirebaseAuth.getInstance().signOut();
             super.onBackPressed();
+            finishAffinity();
             return;
         } else {
             backToast = Toast.makeText(getBaseContext(), "Pulsa de nuevo para salir", Toast.LENGTH_SHORT);

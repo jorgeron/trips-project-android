@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,11 +41,11 @@ import us.master.entregable01.database.FirestoreService;
 import us.master.entregable01.entity.Trip;
 import us.master.entregable01.entity.Util;
 
-public class TripDetailsActivity extends AppCompatActivity implements LocationListener {
+public class TripDetailsActivity extends AppCompatActivity {
 
     ScrollView scrollView;
     LinearLayout linearLayout;
-    TextView textView_title,textView_precio, textView_fechaSalida, textView_fechaLlegada, textView_lugarSalida;
+    TextView textView_title,textView_precio, textView_fechaSalida, textView_fechaLlegada, textView_lugarSalida, textView_distancia;
     ImageView imageView_trip;
     Switch switch_seleccionado;
     Button button_comprar, button_delete;
@@ -68,6 +69,7 @@ public class TripDetailsActivity extends AppCompatActivity implements LocationLi
         textView_fechaSalida=findViewById(R.id.textView_fechaSalida);
         textView_fechaLlegada=findViewById(R.id.textView_fechaLlegada);
         textView_lugarSalida=findViewById(R.id.textView_lugarSalida);
+        textView_distancia=findViewById(R.id.textView_distancia);
         imageView_trip=findViewById(R.id.imageView_trip_detail);
         switch_seleccionado=findViewById(R.id.switch_seleccionado);
         button_comprar=findViewById(R.id.buttonComprar);
@@ -177,6 +179,15 @@ public class TripDetailsActivity extends AppCompatActivity implements LocationLi
         textView_fechaLlegada.setText(Util.formateaFecha(trip.getFechaFin()));
         textView_lugarSalida.setText(trip.getLugarSalida());
         switch_seleccionado.setChecked(trip.isSeleccionado());
+
+        int distancia = Util.calculaDistancia(LocationActivity.lastLocation, trip);
+        textView_distancia.setText(Util.muestraTextoDistancia(distancia));
+        if(distancia > 2000) {
+            textView_distancia.setTextColor(Color.RED);
+        } else {
+            textView_distancia.setTextColor(Color.rgb(0,216,56));
+        }
+
         button_comprar.setVisibility(View.VISIBLE);
         if(trip.isComprado()) {
             button_comprar.setVisibility(View.GONE);
@@ -229,10 +240,5 @@ public class TripDetailsActivity extends AppCompatActivity implements LocationLi
         setResult(RESULT_OK, intent);
 
         super.onBackPressed();
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        Log.i("tripsapp", "cambio loc: " + location.getLatitude() + " " + location.getLongitude());
     }
 }

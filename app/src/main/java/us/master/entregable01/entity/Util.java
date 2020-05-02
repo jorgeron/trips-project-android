@@ -1,5 +1,7 @@
 package us.master.entregable01.entity;
 
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -14,6 +16,8 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+
+import us.master.entregable01.LocationActivity;
 
 public class Util {
     public static String formateaFecha(Calendar calendar) {
@@ -72,19 +76,34 @@ public class Util {
     }
 
 
-    /*public static Calendar generateRandomDate(int maxYear) {
+    public static int calculaDistancia(Location location, Trip trip) {
+        int result = 0;
 
-        //GregorianCalendar gc = new GregorianCalendar();
-        Calendar result = Calendar.getInstance();
-        result.setTime(new Date());
+        if (trip.getCoordenadasSalida() != null) {
+            Location tripLocation = new Location(LocationManager.GPS_PROVIDER);
+            tripLocation.setLatitude(trip.getCoordenadasSalida().getLatitude());
+            tripLocation.setLongitude(trip.getCoordenadasSalida().getLongitude());
 
-        int year = getRandomNumberInRange(Calendar.YEAR, maxYear);
-        result.set(Calendar.YEAR, year);
+            result = (int) tripLocation.distanceTo(location);
+        }
 
-        int dayOfYear = getRandomNumberInRange(1, result.getActualMaximum(Calendar.DAY_OF_YEAR));
-        result.set(Calendar.DAY_OF_YEAR, dayOfYear);
-
-        //Calendar result = gc.getInstance();
         return result;
-    }*/
+    }
+
+    public static String muestraTextoDistancia(int distancia) {
+        String result = "A ";
+
+        if (distancia > 0) {
+
+            if (distancia < 2000) {
+                result = result + distancia + " m";
+            } else {
+                result = result + (distancia/1000) + " km";
+            }
+        } else {
+            result = null;
+        }
+
+        return result;
+    }
 }

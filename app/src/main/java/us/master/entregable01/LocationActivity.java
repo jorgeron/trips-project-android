@@ -61,6 +61,7 @@ public class LocationActivity extends AppCompatActivity {
 
     }
 
+
     private void startLocationService() {
         FusedLocationProviderClient locationServices = LocationServices.getFusedLocationProviderClient(this);
         /* LOCALIZACIÓN PUNTUAL ---------------
