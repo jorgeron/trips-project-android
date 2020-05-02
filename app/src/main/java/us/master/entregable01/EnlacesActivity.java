@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +28,16 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import us.master.entregable01.entity.Enlace;
 import us.master.entregable01.entity.Trip;
+import us.master.entregable01.entity.Util;
+import us.master.entregable01.resttypes.WeatherResponse;
+import us.master.entregable01.resttypes.WeatherRetrofitInterface;
 
 public class EnlacesActivity extends AppCompatActivity {
 
@@ -39,6 +48,9 @@ public class EnlacesActivity extends AppCompatActivity {
     ListView listView;
     FloatingActionButton floatingActionButton;
 
+    TextView textView_welcome, textView_temperature, textView_city;
+    private Retrofit retrofit;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +59,14 @@ public class EnlacesActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.listView);
         floatingActionButton = findViewById(R.id.create_trip_floating_button);
+
+        retrofit = new Retrofit.Builder().baseUrl("https://api.openweathermap.org/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        textView_welcome = findViewById(R.id.textView_welcome);
+        textView_temperature = findViewById(R.id.textView_temperature);
+        textView_city = findViewById(R.id.textView_city);
+        renderizaCampos();
 
         enlaces = Enlace.generaEnlaces();
 
@@ -71,6 +91,33 @@ public class EnlacesActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(EnlacesActivity.this, TripFormActivity.class);
                 startActivity(intent);
+            }
+        });
+    }
+
+    private void renderizaCampos() {
+        String username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        if (username == null) {
+            username = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        }
+        textView_welcome.setText("Bienvenido " + username);
+
+        WeatherRetrofitInterface service = retrofit.create(WeatherRetrofitInterface.class);
+        Call<WeatherResponse> response = service.getCurrentWeather((float)LocationActivity.lastLocation.getLatitude(), (float)LocationActivity.lastLocation.getLongitude(), getString(R.string.open_weather_api_key));
+        response.enqueue(new Callback<WeatherResponse>() {
+            @Override
+            public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    String cityname = response.body().getName();
+                    Double degrees = response.body().getMain().getTemp()-273.15;
+                    textView_city.setText(cityname);
+                    textView_temperature.setText(String.format("%.2f", degrees) + "ºC" );
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WeatherResponse> call, Throwable t) {
+                Log.i("TripsApp", "REST: error en la llamada: " + t.getMessage());
             }
         });
     }

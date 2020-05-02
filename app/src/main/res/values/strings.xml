@@ -56,4 +56,5 @@
     <string name="location_needed">Necesitamos tu localización para esta funcoinalidad</string>
     <string name="location_ok">Aceptar</string>
     <string name="location_cancel">Este permiso es importante para la aplicación</string>
+    <string name="open_weather_api_key">5e4d24d2b5747ab15c8ab607f2fea1f3</string>
 </resources>

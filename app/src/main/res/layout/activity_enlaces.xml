@@ -17,6 +17,51 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:id="@+id/textView_welcome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Welcome" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableEnd="@drawable/ic_my_location_black_24dp"
+                    android:drawablePadding="5dp"
+                    android:gravity="right"
+                    android:text="Weather" />
+
+                <TextView
+                    android:id="@+id/textView_temperature"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableEnd="@drawable/ic_wb_sunny_black_24dp"
+                    android:drawablePadding="5dp"
+                    android:gravity="right"
+                    android:text="Weather" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
 
         <ListView
             android:id="@+id/listView"

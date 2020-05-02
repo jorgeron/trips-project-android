@@ -22,6 +22,14 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.material.snackbar.Snackbar;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import us.master.entregable01.resttypes.WeatherResponse;
+import us.master.entregable01.resttypes.WeatherRetrofitInterface;
+
 public class LocationActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_CODE_LOCATION = 0x123;

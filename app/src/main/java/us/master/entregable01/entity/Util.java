@@ -3,6 +3,7 @@ package us.master.entregable01.entity;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 

@@ -189,135 +189,15 @@ public class LoginActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void checkUserDatabaseLogin(FirebaseUser user) {
-        //TODO
         Toast.makeText(this, String.format(getString(R.string.login_completed), user.getEmail()), Toast. LENGTH_LONG).show();
 
-        firestoreService = FirestoreService.getServiceInstance();
-        firestoreService.getTrips(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<Trip> lista = new ArrayList<>();
-                for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()) {
-                    Trip t = documentSnapshot.toObject(Trip.class);
-                    lista.add(t);
-                }
-                Log.i("Tripstaa", "lista de trips: " + lista);
-            }
-        });
+        FirestoreService.userId = user.getUid();
 
         Intent intent = new Intent(LoginActivity.this, EnlacesActivity.class);
-        intent.putExtra("currentUser", user);
-
         startActivity(intent);
         finish();
-
-        /*
-        firebaseDatabaseService = FirebaseDatabaseService.getServiceInstance();
-
-        // Trip trip = Trip.generaTrips(1).get(0);
-        Trip trip = new Trip(1, "Titulo", "lugarSalida", "urlimg", 1657364153, 1659743877, 1000, false, false);
-
-        firebaseDatabaseService.saveTrip(trip, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                if (databaseError == null) {
-                    Log.i("TripsApp", "Viaje insertado");
-                } else {
-                    Log.i("TripsApp", "Error al insertar viaje " + databaseError.getMessage());
-                }
-            }
-        });
-
-
-        //Este método nos devuelve el snapshot de ese elemento en ese instante concreto. El get de toda la vida
-        firebaseDatabaseService.getTrip("-M5kmOYu0fc7zSVU1mrb").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
-                    Trip trip = dataSnapshot.getValue(Trip.class);
-
-                    Toast.makeText(LoginActivity.this, trip.toString(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-        //Con este método nos subscribimos para estar al tanto de modificaciones del elemento
-        valueEventListener = firebaseDatabaseService.getTrip("-M5kmOYu0fc7zSVU1mrb").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
-                    Trip trip = dataSnapshot.getValue(Trip.class);
-                    Log.i("TripsApp", "Elemento modificado individualmente: " + trip.toString());
-                    Toast.makeText(LoginActivity.this, trip.toString(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-        ChildEventListener childEventListener = firebaseDatabaseService.getTrip().addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
-                    Trip trip = dataSnapshot.getValue(Trip.class);
-
-                    Log.i("TripsApp", "Nuevo viaje añadido: " + trip.toString());
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
-                    Trip trip = dataSnapshot.getValue(Trip.class);
-
-                    Log.i("TripsApp", "Viaje modificado: " + trip.toString());
-                }
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
-                    Trip trip = dataSnapshot.getValue(Trip.class);
-
-                    Log.i("TripsApp", "Viaje eliminado: " + trip.toString());
-                }
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
-                    Trip trip = dataSnapshot.getValue(Trip.class);
-
-                    Log.i("TripsApp", "Viaje movido: " + trip.toString());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-         */
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (firebaseDatabaseService != null && valueEventListener != null) {
-            //Para el unsubscribe
-            firebaseDatabaseService.getTrip("-M5kmOYu0fc7zSVU1mrb").removeEventListener(valueEventListener);
-        }
-    }
 
     private void showErrorMailVerified(FirebaseUser user) {
         hideLoginButton(false);

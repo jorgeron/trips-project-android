@@ -18,7 +18,7 @@ public class FirestoreService {
     private static final String USERS_COLLECTION_NAME = "users";
     private static final String TRIPS_COLLECTION_NAME = "trips";
 
-    private static String userId;
+    public static String userId;
     private static FirebaseFirestore mDatabase;
     private static FirestoreService service;
 

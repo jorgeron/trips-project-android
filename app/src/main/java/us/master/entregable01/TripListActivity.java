@@ -179,6 +179,14 @@ import us.master.entregable01.entity.Util;
 
 
      @Override
+     public void onBackPressed() {
+         if(tripListAdapter != null && tripListAdapter.listenerRegistration != null) {
+             tripListAdapter.listenerRegistration.remove();
+         }
+        super.onBackPressed();
+     }
+
+     @Override
      protected void onDestroy() {
          super.onDestroy();
          if(tripListAdapter != null && tripListAdapter.listenerRegistration != null) {
